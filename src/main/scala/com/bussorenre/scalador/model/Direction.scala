@@ -1,4 +1,4 @@
-package com.bussorenre.scalador
+package com.bussorenre.scalador.model
 
 sealed trait Direction
 
