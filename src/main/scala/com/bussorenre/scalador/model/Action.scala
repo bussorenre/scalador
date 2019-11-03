@@ -12,19 +12,33 @@ object ActionError {
 }
 
 sealed trait Action {
-  def execute(player: Player, board: Board): Either[ActionError, Board]
+  def execute(order: Order, board: Board): Either[ActionError, Board]
 }
 
-case class MoveTo(pos: Pos) extends Action {
-  override def execute(player: Player, board: Board): Either[ActionError, Board] = {
-    ???
+case class MoveTo(direction: Direction) extends Action {
+  override def execute(order: Order, board: Board): Either[ActionError, Board] = {
+    val player = board.getPlayer(order)
+    if (board.isMovingOverWall(player.pos, direction)) Left(ActionError.THWARTED)
+    else if (board.isMovingToOudside(player.pos, direction)) Left(ActionError.OUT_OF_BOARD)
+    else
+      Right(
+        board.copy(
+          players = board.players.map { self =>
+            self.id match {
+              case player.id => self.copy(pos = self.pos + direction)
+              case _         => self
+            }
+          }
+        )
+      )
   }
 }
 
 case class PlaceWall(wall: Wall) extends Action {
-  override def execute(player: Player, board: Board): Either[ActionError, Board] = {
-    if (!wall.pos.isInside(board.size)) Left(ActionError.OUT_OF_BOARD)
-    else if (board.walls.exists(_.conflictTo(wall))) Left(ActionError.ALREADY_EXISTS)
+  override def execute(order: Order, board: Board): Either[ActionError, Board] = {
+    val player = board.getPlayer(order)
+    if (board.isPlacingWallToOutside(wall)) Left(ActionError.OUT_OF_BOARD)
+    else if (board.isPlacingWallWithConflicts(wall)) Left(ActionError.ALREADY_EXISTS)
     else if (player.remains - 1 == 0) Left(ActionError.NO_WALL_REMAIN)
     else
       Right(

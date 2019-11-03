@@ -9,20 +9,33 @@ object Main {
     val board = Board.initialize("player1", "player2")
 
     val actions = Seq(
-      (board.firstPlayer, PlaceWall(Wall(Pos(5, 1), Vertical))),
-      (board.secondPlayer, PlaceWall(Wall(Pos(7, 1), Vertical))),
-      (board.firstPlayer, PlaceWall(Wall(Pos(8, 1), Vertical))),
-      (board.secondPlayer, PlaceWall(Wall(Pos(3, 6), Horizontal))),
-      (board.firstPlayer, PlaceWall(Wall(Pos(2, 4), Horizontal)))
+      (Order.First, PlaceWall(Wall(Pos(5, 1), Vertical))),
+      (Order.Second, PlaceWall(Wall(Pos(7, 1), Vertical))),
+      (Order.First, PlaceWall(Wall(Pos(3, 1), Vertical))),
+      (Order.Second, PlaceWall(Wall(Pos(3, 6), Horizontal))),
+      (Order.First, PlaceWall(Wall(Pos(2, 4), Horizontal))),
+      (Order.Second, MoveTo(Direction.West)),
+      (Order.First, PlaceWall(Wall(Pos(3, 3), Horizontal))),
+      (Order.Second, MoveTo(Direction.South)),
+      (Order.Second, MoveTo(Direction.South)),
+      (Order.First, PlaceWall(Wall(Pos(3, 2), Horizontal))),
+      (Order.Second, MoveTo(Direction.West)),
+      (Order.First, PlaceWall(Wall(Pos(4, 1), Horizontal))),
+      (Order.Second, PlaceWall(Wall(Pos(5, 2), Horizontal))),
+      (Order.First, PlaceWall(Wall(Pos(5, 3), Vertical))),
+      (Order.First, PlaceWall(Wall(Pos(3, 5), Vertical)))
     )
 
     val service = new DrawService
 
-    val result = actions.foldLeft(board)((board, acts) => {
-      val (player, action) = acts
-      action.execute(player, board) match {
-        case Left(e: ActionError) => throw e.toException
-        case Right(board)         => board
+    val result = actions.foldLeft(board)((b, a) => {
+      val (player, action) = a
+      action.execute(player, b) match {
+        case Left(e: ActionError) => {
+          service.drawBoard(b)
+          throw e.toException
+        }
+        case Right(b) => b
       }
     })
 

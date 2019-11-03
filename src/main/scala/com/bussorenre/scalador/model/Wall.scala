@@ -15,7 +15,7 @@ case class Wall(
     case (Horizontal, Horizontal) =>
       this.pos == other.pos || this.pos + East == other.pos || this.pos == other.pos + East
     case (Vertical, Vertical)   => this.pos == other.pos || this.pos + South == other.pos || this.pos == other.pos + South
-    case (Horizontal, Vertical) => this.pos == other.pos || this.pos == other.pos + South
-    case (Vertical, Horizontal) => this.pos == other.pos || this.pos + South == other.pos
+    case (Horizontal, Vertical) => this.pos == other.pos
+    case (Vertical, Horizontal) => this.pos == other.pos
   }
 }
