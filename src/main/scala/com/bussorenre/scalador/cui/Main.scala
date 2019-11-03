@@ -1,48 +1,18 @@
 package com.bussorenre.scalador.cui
 
-import com.bussorenre.scalador.model.WallDirection.{ Horizontal, Vertical }
-import com.bussorenre.scalador.model.action._
-import com.bussorenre.scalador.model._
-import com.bussorenre.scalador.service.GameService
+import com.bussorenre.scalador.player.{ ComputerPlayer, ComputerPlayerA, ComputerPlayerB }
+import com.bussorenre.scalador.service.game.GameService
 
 object Main {
   def main(args: Array[String]): Unit = {
 
-    val game = new GameService
-
-    val board = game.initialize("piece1", "piece2")
-
-    val actions = Seq(
-      (Order.First, PlaceWallAction(Pos(5, 1), Vertical)),
-      (Order.Second, PlaceWallAction(Pos(7, 1), Vertical)),
-      (Order.First, PlaceWallAction(Pos(3, 1), Vertical)),
-      (Order.Second, PlaceWallAction(Pos(3, 6), Horizontal)),
-      (Order.First, PlaceWallAction(Pos(2, 4), Horizontal)),
-      (Order.Second, MoveToAction(Direction.West)),
-      (Order.First, PlaceWallAction(Pos(3, 3), Horizontal)),
-      (Order.Second, MoveToAction(Direction.South)),
-      (Order.Second, MoveToAction(Direction.South)),
-      (Order.First, PlaceWallAction(Pos(3, 2), Horizontal)),
-      (Order.Second, MoveToAction(Direction.West)),
-      (Order.First, PlaceWallAction(Pos(4, 1), Horizontal)),
-      (Order.Second, PlaceWallAction(Pos(5, 2), Horizontal)),
-      (Order.First, PlaceWallAction(Pos(5, 3), Vertical)),
-      (Order.First, PlaceWallAction(Pos(3, 5), Vertical))
-    )
-
+    val player1 = new ComputerPlayerA
+    val player2 = new ComputerPlayerB
+    val game    = new GameService(player1, player2)
     val service = new DrawService
 
-    val result = actions.foldLeft(board)((b, a) => {
-      val (piece, action) = a
-      action.execute(piece, b) match {
-        case Left(e: ActionError) => {
-          service.drawBoard(b)
-          throw e.toException
-        }
-        case Right(b) => b
-      }
-    })
+    game.start()
 
-    service.drawBoard(result)
+    service.showHistory(game.boardHistory)
   }
 }

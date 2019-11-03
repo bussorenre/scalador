@@ -7,7 +7,19 @@ import com.bussorenre.scalador.model._
 class DrawService {
   import com.bussorenre.scalador.cui.Text._
 
+  private def clear(): Unit = {
+    print("\u001b[2J")
+  }
+
+  def showHistory(boards: Seq[Board]) = {
+    boards.reverse.map { board =>
+      drawBoard(board)
+      Thread.sleep(200)
+    }
+  }
+
   def drawBoard(board: Board): Unit = {
+    clear()
     convert(board).map(println(_))
   }
 
@@ -34,7 +46,7 @@ class DrawService {
       } yield {
 
         direction match {
-          case Vertical if x != board.size => {
+          case Vertical => {
             // Render piece
             board.pieces.find(_.pos == Pos(x, y)) match {
               case Some(piece) => draw(getOrderColor(piece.order), getPiece(piece.order))
@@ -42,9 +54,11 @@ class DrawService {
             }
 
             // Render vertical wall
-            board.verticalWalls.find(wall => wall.pos == Pos(x, y) || wall.pos == Pos(x, y - 1)) match {
-              case Some(wall) => draw(getOrderColor(wall.order), Element.VerticalWall)
-              case None       => draw(Color.Gray, Element.VerticalWall)
+            if (x != board.size) {
+              board.verticalWalls.find(wall => wall.pos == Pos(x, y) || wall.pos == Pos(x, y - 1)) match {
+                case Some(wall) => draw(getOrderColor(wall.order), Element.VerticalWall)
+                case None       => draw(Color.Gray, Element.VerticalWall)
+              }
             }
           }
           case Horizontal if y != board.size => {
