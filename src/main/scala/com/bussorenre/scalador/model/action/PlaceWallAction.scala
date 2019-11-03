@@ -4,20 +4,20 @@ import com.bussorenre.scalador.model._
 
 case class PlaceWallAction(pos: Pos, direction: WallDirection) extends Action {
   override def execute(order: Order, board: Board): Either[ActionError, Board] = {
-    val player = board.getPlayer(order)
-    val wall   = Wall(pos, direction, order)
+    val piece = board.getpiece(order)
+    val wall  = Wall(pos, direction, order)
 
     for {
       _ <- conflictsValidation(wall)(board)
-      _ <- noRemainsValidation(player)(board)
+      _ <- noRemainsValidation(piece)(board)
       _ <- outsideValidation(wall)(board)
     } yield {
       board.copy(
         walls = wall +: board.walls,
-        players = board.players.map { self =>
+        pieces = board.pieces.map { self =>
           self.id match {
-            case player.id => self.copy(remains = self.remains - 1)
-            case _         => self
+            case piece.id => self.copy(remains = self.remains - 1)
+            case _        => self
           }
         }
       )
@@ -31,8 +31,8 @@ case class PlaceWallAction(pos: Pos, direction: WallDirection) extends Action {
     }
   }
 
-  private def noRemainsValidation(player: Player)(implicit board: Board): Either[ActionError, Unit] = {
-    player.remains match {
+  private def noRemainsValidation(piece: Piece)(implicit board: Board): Either[ActionError, Unit] = {
+    piece.remains match {
       case 0 => Left(ActionError.NO_WALL_REMAIN)
       case _ => Right()
     }

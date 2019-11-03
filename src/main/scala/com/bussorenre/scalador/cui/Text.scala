@@ -18,10 +18,10 @@ object Text {
   }
 
   object Element {
-    sealed abstract class Player(id: String) extends TextElement("<" + id + ">")
-    case object DefaultPlayer                extends Player("P")
-    case object PlayerA                      extends Player("A")
-    case object PlayerB                      extends Player("B")
+    sealed abstract class piece(id: String) extends TextElement("<" + id + ">")
+    case object Defaultpiece                extends piece("P")
+    case object pieceA                      extends piece("A")
+    case object pieceB                      extends piece("B")
 
     case object EmptyTile        extends TextElement("   ")
     case object VerticalWall     extends TextElement("|")

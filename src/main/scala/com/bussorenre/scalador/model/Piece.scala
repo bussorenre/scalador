@@ -1,6 +1,6 @@
 package com.bussorenre.scalador.model
 
-case class Player(
+case class Piece(
   id: String,
   order: Order,
   pos: Pos,

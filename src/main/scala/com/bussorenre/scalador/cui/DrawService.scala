@@ -16,6 +16,11 @@ class DrawService {
     case Second => Color.Green
   }
 
+  def getPiece(order: Order): Text.TextElement = order match {
+    case First  => Element.pieceA
+    case Second => Element.pieceB
+  }
+
   def convert(board: Board): List[String] = {
     for {
       y         <- (1 to board.size).toList
@@ -30,10 +35,10 @@ class DrawService {
 
         direction match {
           case Vertical if x != board.size => {
-            // Render player
-            board.players.find(_.pos == Pos(x, y)) match {
-              case Some(player) => draw(getOrderColor(player.order), Element.DefaultPlayer)
-              case _            => draw(Color.Gray, Element.EmptyTile)
+            // Render piece
+            board.pieces.find(_.pos == Pos(x, y)) match {
+              case Some(piece) => draw(getOrderColor(piece.order), getPiece(piece.order))
+              case _           => draw(Color.Gray, Element.EmptyTile)
             }
 
             // Render vertical wall

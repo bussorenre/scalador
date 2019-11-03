@@ -3,11 +3,14 @@ package com.bussorenre.scalador.cui
 import com.bussorenre.scalador.model.WallDirection.{ Horizontal, Vertical }
 import com.bussorenre.scalador.model.action._
 import com.bussorenre.scalador.model._
+import com.bussorenre.scalador.service.GameService
 
 object Main {
   def main(args: Array[String]): Unit = {
 
-    val board = Board.initialize("player1", "player2")
+    val game = new GameService
+
+    val board = game.initialize("piece1", "piece2")
 
     val actions = Seq(
       (Order.First, PlaceWallAction(Pos(5, 1), Vertical)),
@@ -30,8 +33,8 @@ object Main {
     val service = new DrawService
 
     val result = actions.foldLeft(board)((b, a) => {
-      val (player, action) = a
-      action.execute(player, b) match {
+      val (piece, action) = a
+      action.execute(piece, b) match {
         case Left(e: ActionError) => {
           service.drawBoard(b)
           throw e.toException
