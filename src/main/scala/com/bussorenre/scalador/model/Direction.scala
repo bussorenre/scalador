@@ -15,10 +15,3 @@ object Direction {
     case West  => Pos(-1, 0)
   }
 }
-
-sealed trait WallDirection
-
-object WallDirection {
-  case object Horizontal extends WallDirection
-  case object Vertical   extends WallDirection
-}
