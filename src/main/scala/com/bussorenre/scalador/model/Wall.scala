@@ -5,7 +5,8 @@ import com.bussorenre.scalador.model.WallDirection.{ Horizontal, Vertical }
 
 case class Wall(
   pos: Pos,
-  direction: WallDirection
+  direction: WallDirection,
+  order: Order
 ) {
 
   def isHorizontal = this.direction == Horizontal

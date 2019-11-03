@@ -9,21 +9,21 @@ object Main {
     val board = Board.initialize("player1", "player2")
 
     val actions = Seq(
-      (Order.First, PlaceWall(Wall(Pos(5, 1), Vertical))),
-      (Order.Second, PlaceWall(Wall(Pos(7, 1), Vertical))),
-      (Order.First, PlaceWall(Wall(Pos(3, 1), Vertical))),
-      (Order.Second, PlaceWall(Wall(Pos(3, 6), Horizontal))),
-      (Order.First, PlaceWall(Wall(Pos(2, 4), Horizontal))),
+      (Order.First, PlaceWall(Pos(5, 1), Vertical)),
+      (Order.Second, PlaceWall(Pos(7, 1), Vertical)),
+      (Order.First, PlaceWall(Pos(3, 1), Vertical)),
+      (Order.Second, PlaceWall(Pos(3, 6), Horizontal)),
+      (Order.First, PlaceWall(Pos(2, 4), Horizontal)),
       (Order.Second, MoveTo(Direction.West)),
-      (Order.First, PlaceWall(Wall(Pos(3, 3), Horizontal))),
+      (Order.First, PlaceWall(Pos(3, 3), Horizontal)),
       (Order.Second, MoveTo(Direction.South)),
       (Order.Second, MoveTo(Direction.South)),
-      (Order.First, PlaceWall(Wall(Pos(3, 2), Horizontal))),
+      (Order.First, PlaceWall(Pos(3, 2), Horizontal)),
       (Order.Second, MoveTo(Direction.West)),
-      (Order.First, PlaceWall(Wall(Pos(4, 1), Horizontal))),
-      (Order.Second, PlaceWall(Wall(Pos(5, 2), Horizontal))),
-      (Order.First, PlaceWall(Wall(Pos(5, 3), Vertical))),
-      (Order.First, PlaceWall(Wall(Pos(3, 5), Vertical)))
+      (Order.First, PlaceWall(Pos(4, 1), Horizontal)),
+      (Order.Second, PlaceWall(Pos(5, 2), Horizontal)),
+      (Order.First, PlaceWall(Pos(5, 3), Vertical)),
+      (Order.First, PlaceWall(Pos(3, 5), Vertical))
     )
 
     val service = new DrawService

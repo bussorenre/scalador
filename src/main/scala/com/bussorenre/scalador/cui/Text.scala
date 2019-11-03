@@ -9,7 +9,7 @@ object Text {
   object Color {
     case object Default extends TextColor("\u001b[00m")
     case object Red     extends TextColor("\u001b[31m")
-    case object Green   extends TextColor("\u001b[32m")
+    case object Green   extends TextColor("\u001b[34m")
     case object Gray    extends TextColor("\u001b[90m")
   }
 

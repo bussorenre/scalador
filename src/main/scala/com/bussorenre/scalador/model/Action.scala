@@ -34,9 +34,10 @@ case class MoveTo(direction: Direction) extends Action {
   }
 }
 
-case class PlaceWall(wall: Wall) extends Action {
+case class PlaceWall(pos: Pos, direction: WallDirection) extends Action {
   override def execute(order: Order, board: Board): Either[ActionError, Board] = {
     val player = board.getPlayer(order)
+    val wall   = Wall(pos, direction, order)
     if (board.isPlacingWallToOutside(wall)) Left(ActionError.OUT_OF_BOARD)
     else if (board.isPlacingWallWithConflicts(wall)) Left(ActionError.ALREADY_EXISTS)
     else if (player.remains - 1 == 0) Left(ActionError.NO_WALL_REMAIN)
