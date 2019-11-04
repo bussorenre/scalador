@@ -81,6 +81,7 @@ class DrawService {
           case _ => Nil
         }
       }
+      draw(Color.Default, Element.Nothing)
       b.result()
     }
   }

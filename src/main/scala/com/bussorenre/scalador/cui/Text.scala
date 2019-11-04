@@ -29,5 +29,7 @@ object Text {
     case object EmptyVertex      extends TextElement(" ")
     case object HorizontalVertex extends TextElement("-")
     case object VerticalVertex   extends TextElement("|")
+
+    case object Nothing extends TextElement("")
   }
 }

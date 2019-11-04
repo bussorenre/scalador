@@ -8,8 +8,8 @@ case class Board(
   def verticalWalls   = walls.filter(_.isVertical)
   def horizontalWalls = walls.filter(_.isHorizontal)
 
-  def firstpiece  = pieces(0)
-  def secondpiece = pieces(1)
+  def firstPiece  = pieces(0)
+  def secondPiece = pieces(1)
 
-  def getpiece(order: Order) = pieces.find(_.order == order).get
+  def getPiece(order: Order) = pieces.find(_.order == order).get
 }

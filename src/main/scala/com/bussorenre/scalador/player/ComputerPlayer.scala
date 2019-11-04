@@ -56,8 +56,7 @@ class ComputerPlayerA extends ComputerPlayer(Order.First) {
     MoveToAction(West),
     MoveToAction(North),
     MoveToAction(North),
-    MoveToAction(North),
-    PlaceWallAction(Pos(5, 1), Horizontal)
+    MoveToAction(North)
   )
   override def decide(board: Board): Action = {
     val ret = actions(turn)

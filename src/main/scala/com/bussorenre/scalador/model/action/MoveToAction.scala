@@ -5,7 +5,7 @@ import com.bussorenre.scalador.model.{ Board, Direction, Order, Pos }
 
 case class MoveToAction(direction: Direction) extends Action {
   override def execute(order: Order, board: Board): Either[ActionError, Board] = {
-    val piece = board.getpiece(order)
+    val piece = board.getPiece(order)
     for {
       _ <- movingOverWallValidation(piece.pos, direction)(board)
       _ <- movingToOutsideValidation(piece.pos, direction)(board)

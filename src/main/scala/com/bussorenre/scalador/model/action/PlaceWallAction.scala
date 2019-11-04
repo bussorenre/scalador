@@ -4,7 +4,7 @@ import com.bussorenre.scalador.model._
 
 case class PlaceWallAction(pos: Pos, direction: WallDirection) extends Action {
   override def execute(order: Order, board: Board): Either[ActionError, Board] = {
-    val piece = board.getpiece(order)
+    val piece = board.getPiece(order)
     val wall  = Wall(pos, direction, order)
 
     for {

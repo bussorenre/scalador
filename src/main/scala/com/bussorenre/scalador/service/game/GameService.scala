@@ -27,10 +27,9 @@ class GameService(player1: Player, player2: Player) {
     case Order.Second => player2
   }
 
-  private def nextTurn(): Boolean = {
+  private def nextTurn: Boolean = {
     order = order.next
     turn = turn + 1
-    if (turn > 100) false
     true
   }
 
@@ -38,20 +37,30 @@ class GameService(player1: Player, player2: Player) {
     for {
       board <- action.execute(actor.order, board)
     } yield {
+      nextTurn
       boardHistory ::= board
       board
     }
   }
 
-  def start(): Unit = {
-    def innerLoop(): Unit = {
-      executeAction(player, player.decide(board)) match {
-        case Left(e) => println(e.toException.getMessage)
-        case Right(board) => {
-          // TODO: クリア条件を満たしているかチェックとか
-          if (nextTurn()) innerLoop()
-          ()
+  private def checkGameStatus(board: Board): GameStatus = {
+    if (board.firstPiece.pos.y == 1) GameStatus.WIN_FIRST
+    else if (board.secondPiece.pos.y == board.size) GameStatus.WIN_SECOND
+    else GameStatus.CONTINUE
+  }
+
+  def run(): Either[ActionError, GameStatus] = {
+    def innerLoop(): Either[ActionError, GameStatus] = {
+      for {
+        status <- executeAction(player, player.decide(board)).map { board =>
+          checkGameStatus(board)
         }
+        result <- status match {
+          case GameStatus.CONTINUE => innerLoop()
+          case _                   => Right(status)
+        }
+      } yield {
+        result
       }
     }
 
