@@ -24,24 +24,16 @@ case class MoveToAction(direction: Direction) extends Action {
   private def movingOverWallValidation(pos: Pos, direction: Direction)(
     implicit board: Board
   ): Either[ActionError, Unit] = {
-    val moveTo = pos + direction
-    val canMove = direction match {
-      case South => board.horizontalWalls.exists(wall => wall.pos == pos || wall.pos + East == pos)
-      case North => board.horizontalWalls.exists(wall => wall.pos == moveTo || wall.pos + East == moveTo)
-      case East  => board.verticalWalls.exists(wall => wall.pos == pos || wall.pos + South == pos)
-      case West  => board.verticalWalls.exists(wall => wall.pos == moveTo || wall.pos + South == moveTo)
-    }
-    canMove match {
-      case true  => Left(ActionError.THWARTED)
-      case false => Right()
+    board.canMoveTo(pos, direction) match {
+      case true  => Right()
+      case false => Left(ActionError.THWARTED)
     }
   }
 
   private def movingToOutsideValidation(pos: Pos, direction: Direction)(
     implicit board: Board
   ): Either[ActionError, Unit] = {
-    val moveTo = pos + direction
-    moveTo.x > 0 && moveTo.x <= board.size && moveTo.y > 0 && moveTo.y <= board.size match {
+    board.movingToInside(pos, direction) match {
       case true  => Right()
       case false => Left(ActionError.OUT_OF_BOARD)
     }

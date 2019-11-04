@@ -11,9 +11,14 @@ class DrawService {
     print("\u001b[2J")
   }
 
+  def showCosts(board: Board) = {
+    println(s"Player1: ${board.costs(board.firstPiece).get} || Player2: ${board.costs(board.secondPiece).get}")
+  }
+
   def showHistory(boards: Seq[Board]) = {
     boards.reverse.map { board =>
       drawBoard(board)
+      showCosts(board)
       Thread.sleep(200)
     }
   }

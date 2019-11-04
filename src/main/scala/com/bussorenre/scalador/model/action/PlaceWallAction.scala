@@ -11,8 +11,7 @@ case class PlaceWallAction(pos: Pos, direction: WallDirection) extends Action {
       _ <- conflictsValidation(wall)(board)
       _ <- noRemainsValidation(piece)(board)
       _ <- outsideValidation(wall)(board)
-    } yield {
-      board.copy(
+      current = board.copy(
         walls = wall +: board.walls,
         pieces = board.pieces.map { self =>
           self.id match {
@@ -21,6 +20,9 @@ case class PlaceWallAction(pos: Pos, direction: WallDirection) extends Action {
           }
         }
       )
+      _ <- noRouteToGoalValidation(current)
+    } yield {
+      current
     }
   }
 
@@ -42,6 +44,13 @@ case class PlaceWallAction(pos: Pos, direction: WallDirection) extends Action {
     wall.pos.x > 0 && wall.pos.x < board.size && wall.pos.y > 0 && wall.pos.y < board.size match {
       case true  => Right()
       case false => Left(ActionError.OUT_OF_BOARD)
+    }
+  }
+
+  private def noRouteToGoalValidation(board: Board): Either[ActionError, Unit] = {
+    (board.costs(board.firstPiece), board.costs(board.secondPiece)) match {
+      case (Some(_), Some(_)) => Right()
+      case _                  => Left(ActionError.NO_ROUTE_TO_GOAL)
     }
   }
 }
