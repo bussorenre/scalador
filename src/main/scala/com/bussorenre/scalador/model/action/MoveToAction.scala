@@ -5,16 +5,16 @@ import com.bussorenre.scalador.model.{ Board, Direction, Order, Pos }
 
 case class MoveToAction(direction: Direction) extends Action {
   override def execute(order: Order, board: Board): Either[ActionError, Board] = {
-    val piece = board.getPiece(order)
+    val pawn = board.getPawn(order)
     for {
-      _ <- movingOverWallValidation(piece.pos, direction)(board)
-      _ <- movingToOutsideValidation(piece.pos, direction)(board)
+      _ <- movingOverWallValidation(pawn.pos, direction)(board)
+      _ <- movingToOutsideValidation(pawn.pos, direction)(board)
     } yield {
       board.copy(
-        pieces = board.pieces.map { self =>
+        pawns = board.pawns.map { self =>
           self.id match {
-            case piece.id => self.copy(pos = self.pos + direction)
-            case _        => self
+            case pawn.id => self.copy(pos = self.pos + direction)
+            case _       => self
           }
         }
       )

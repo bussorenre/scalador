@@ -12,9 +12,9 @@ class GameService(player1: Player, player2: Player) {
     Board(
       size = 9,
       walls = Seq(),
-      pieces = Seq(
-        Piece(player1.id, Order.First, Pos(5, 9), 10),
-        Piece(player2.id, Order.Second, Pos(5, 1), 10)
+      pawns = Seq(
+        Pawn(player1.id, Order.First, Pos(5, 9), 10),
+        Pawn(player2.id, Order.Second, Pos(5, 1), 10)
       )
     )
   )
@@ -44,8 +44,8 @@ class GameService(player1: Player, player2: Player) {
   }
 
   private def checkGameStatus(board: Board): GameStatus = {
-    if (board.firstPiece.pos.y == 1) GameStatus.WIN_FIRST
-    else if (board.secondPiece.pos.y == board.size) GameStatus.WIN_SECOND
+    if (board.firstPawn.pos.y == 1) GameStatus.WIN_FIRST
+    else if (board.secondPawn.pos.y == board.size) GameStatus.WIN_SECOND
     else GameStatus.CONTINUE
   }
 

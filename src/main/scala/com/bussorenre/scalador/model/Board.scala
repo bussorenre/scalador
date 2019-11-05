@@ -5,26 +5,26 @@ import com.bussorenre.scalador.model.Direction.{ East, North, South, West }
 case class Board(
   size: Int,
   walls: Seq[Wall],
-  pieces: Seq[Piece]
+  pawns: Seq[Pawn]
 ) {
   def verticalWalls   = walls.filter(_.isVertical)
   def horizontalWalls = walls.filter(_.isHorizontal)
 
-  def firstPiece  = pieces(0)
-  def secondPiece = pieces(1)
+  def firstPawn  = pawns(0)
+  def secondPawn = pawns(1)
 
-  def getPiece(order: Order) = pieces.find(_.order == order).get
+  def getPawn(order: Order) = pawns.find(_.order == order).get
 
-  def costs(piece: Piece): Option[Int] = {
-    val goals = piece.order match {
+  def costs(pawn: Pawn): Option[Int] = {
+    val goals = pawn.order match {
       case Order.First  => (1 to 9).map(Pos(_, 1))
       case Order.Second => (1 to 9).map(Pos(_, 9))
     }
-    goals.map(costTo(_, piece)).sorted.head
+    goals.map(costTo(_, pawn)).sorted.head
   }
 
   // TODO: refactor
-  private def costTo(goal: Pos, piece: Piece): Option[Int] = {
+  private def costTo(goal: Pos, pawn: Pawn): Option[Int] = {
     val tiles = Array.ofDim[Int](9, 9)
     tiles.map(_.map(_ => 0))
 
@@ -51,7 +51,7 @@ case class Board(
       }
     }
     innerCostTo(goal)
-    getTile(piece.pos) match {
+    getTile(pawn.pos) match {
       case 0       => None
       case _ @cost => Some(cost - 1)
     }

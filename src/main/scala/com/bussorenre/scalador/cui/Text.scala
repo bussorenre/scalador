@@ -18,10 +18,10 @@ object Text {
   }
 
   object Element {
-    sealed abstract class piece(id: String) extends TextElement("<" + id + ">")
-    case object Defaultpiece                extends piece("P")
-    case object pieceA                      extends piece("A")
-    case object pieceB                      extends piece("B")
+    sealed abstract class pawn(id: String) extends TextElement("<" + id + ">")
+    case object Defaultpawn                extends pawn("P")
+    case object pawnA                      extends pawn("A")
+    case object pawnB                      extends pawn("B")
 
     case object EmptyTile        extends TextElement("   ")
     case object VerticalWall     extends TextElement("|")

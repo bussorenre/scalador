@@ -1,6 +1,5 @@
 package com.bussorenre.scalador.cui
 
-import com.bussorenre.scalador.model.Order
 import com.bussorenre.scalador.player.{ ComputerPlayer, ComputerPlayerA, ComputerPlayerB }
 import com.bussorenre.scalador.service.game.{ GameService, GameStatus }
 
@@ -21,6 +20,6 @@ object Main {
       }
       case Left(e) => println(e.toException.toString)
     }
-    cui.showHistory(game.boardHistory)
+    cui.showHistory(game.boardHistory, 1000)
   }
 }

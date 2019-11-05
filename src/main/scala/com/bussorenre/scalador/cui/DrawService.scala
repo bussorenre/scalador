@@ -12,14 +12,14 @@ class DrawService {
   }
 
   def showCosts(board: Board) = {
-    println(s"Player1: ${board.costs(board.firstPiece).get} || Player2: ${board.costs(board.secondPiece).get}")
+    println(s"Player1: ${board.costs(board.firstPawn).get} || Player2: ${board.costs(board.secondPawn).get}")
   }
 
-  def showHistory(boards: Seq[Board]) = {
+  def showHistory(boards: Seq[Board], interval: Long) = {
     boards.reverse.map { board =>
       drawBoard(board)
       showCosts(board)
-      Thread.sleep(200)
+      Thread.sleep(interval)
     }
   }
 
@@ -33,9 +33,9 @@ class DrawService {
     case Second => Color.Green
   }
 
-  def getPiece(order: Order): Text.TextElement = order match {
-    case First  => Element.pieceA
-    case Second => Element.pieceB
+  def getPawn(order: Order): Text.TextElement = order match {
+    case First  => Element.pawnA
+    case Second => Element.pawnB
   }
 
   def convert(board: Board): List[String] = {
@@ -52,10 +52,10 @@ class DrawService {
 
         direction match {
           case Vertical => {
-            // Render piece
-            board.pieces.find(_.pos == Pos(x, y)) match {
-              case Some(piece) => draw(getOrderColor(piece.order), getPiece(piece.order))
-              case _           => draw(Color.Gray, Element.EmptyTile)
+            // Render pawn
+            board.pawns.find(_.pos == Pos(x, y)) match {
+              case Some(pawn) => draw(getOrderColor(pawn.order), getPawn(pawn.order))
+              case _          => draw(Color.Gray, Element.EmptyTile)
             }
 
             // Render vertical wall
